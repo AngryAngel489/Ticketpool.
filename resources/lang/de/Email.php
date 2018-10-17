@@ -5,13 +5,13 @@
 
 return array (
   //==================================== Translations ====================================//
-  'attendize_register' => 'Thank you for registering for Attendize',
-  'invite_user' => ':name added you to an :app account.',
-  'message_regarding_event' => 'Message Regarding: :event',
-  'organiser_copy' => '[Organiser Copy]',
-  'refund_from_name' => 'You have received a refund from :name',
-  'your_ticket_cancelled' => 'Your ticket has been cancelled',
-  'your_ticket_for_event' => 'Your ticket for the event :event',
+  'attendize_register' => 'Danke das sie sich bei Attendize regestriert haben',
+  'invite_user' => ':name hat Ihnen einen :app account erstellt.',
+  'message_regarding_event' => 'Nachricht betreffend: :event',
+  'organiser_copy' => '[Kopie für den Veranstalter]',
+  'refund_from_name' => 'Sie haben eine Rückerstattung von :name erhalten',
+  'your_ticket_cancelled' => 'Ihr Ticket wurde storniert',
+  'your_ticket_for_event' => 'Ihr Ticket für die Veranstaltung :event',
     //================================== Obsolete strings ==================================//
   'LLH:obsolete' => 
   array (
