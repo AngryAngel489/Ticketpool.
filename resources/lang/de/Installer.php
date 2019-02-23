@@ -43,8 +43,8 @@ return array(
     'requirement_not_met' => 'Fehler: <b>:requirement</b> erweiterung nicht geladen',
     'setup' => 'Attendize Setup',
     'setup_completed' => 'Attendize Setup abgeschlossen',
-    'setup_completed_already_message' => "An install file has been detected which means Attendize setup process has already completed. <br /> If you haven't setup a default user you can " .
-                                         "<a href='/signup'>Signup Default User</a><br />If you have already created a default user you can <a href='/login'>Login Here </a>",
-    'test_database_connection' => 'Test Database Connection',
+    'setup_completed_already_message' => "Es wurde eine Installationsdatei erkannt. Dies bedeutet, das bereits eine Installation durchgeführt worden. <br /> Wenn Sie keinen Standartbenutzer erstellt haben, können Sie sich " .
+                                         "<a href='/signup'>einen Standartbenutzer erstellen</a><br />Wenn Sie bereits einen Standart Benutzer erstellt haben können Sie sich hier <a href='/login'>einloggen </a>",
+    'test_database_connection' => 'Datenbankverbindung testen.',
     'title' => 'Attendize Web Installer',
 );
