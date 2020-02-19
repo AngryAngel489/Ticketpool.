@@ -87,4 +87,6 @@ return [
     'your_message' => 'Il tuo messaggio',
     'your_name' => 'Il tuo nome',
     'your' => 'Il tuo',
+    'stripe_credit_or_debit_card' => 'Carta di credito o debito',
+    'complete_payment' => 'Esegui il pagamento',
 ];
