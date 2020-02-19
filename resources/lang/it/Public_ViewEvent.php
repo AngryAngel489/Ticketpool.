@@ -1,7 +1,7 @@
 <?php
 
 return [
-    'Contact' => 'Contatto',
+    'Contact' => 'Contatta',
     'DETAILS' => 'DETTAGLI',
     'Facebook' => 'Facebook',
     'LOCATION' => 'LUOGO',
@@ -13,7 +13,7 @@ return [
     'attendee_cancelled' => 'Annullato',
     'below_order_details_header' => '',
     'below_payment_information_header' => '',
-    'below_tickets' => 'Scegliere il numero di biglietti e clicca "registrati". Nella schermata successiva potrai procedere con il pagamento.',
+    'below_tickets' => 'Scegli il numero di biglietti e clicca su "registrati". Nella schermata successiva potrai procedere con il pagamento.',
     'booking_fee' => 'Tassa di prenotazione',
     'booking_fees' => 'Tasse di prenotazione',
     'is_business' => 'Sei un\'azienda?',
@@ -70,7 +70,7 @@ return [
     'sales_have_ended' => 'La vendita si è conclusa',
     'sales_have_not_started' => 'La vendita non è ancora cominciata',
     'send_message_submit' => 'Invia messaggio',
-    'share_event' => 'Condividi evento',
+    'share_event' => 'Condividi l\'evento',
     'sold_out' => 'Esaurito',
     'sub_total' => 'Totale parziale',
     'thank_you_for_your_order' => 'Grazie per il vostro ordine!',
