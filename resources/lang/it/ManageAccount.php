@@ -32,7 +32,7 @@ return [
     'paypal_settings' => 'Impostazioni PayPal',
     'paypal_signature' => 'Firma PayPal',
     'paypal_username' => 'Username PayPal',
-    'save_account_details_submit' => 'Salva dettagli del conto',
+    'save_account_details_submit' => 'Salva dettagli dell\'account',
     'save_payment_details_submit' => 'Salva i dettagli di pagamento',
     'secret_code' => 'Codice segreto',
     'secure_hash_code' => 'Codice hash',

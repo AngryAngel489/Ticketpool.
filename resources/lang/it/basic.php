@@ -6,7 +6,7 @@ return [
     'affiliates' => 'Affiliati',
     'attendees' => 'Partecipanti',
     'back_to_login' => 'Torna al login',
-    'back_to_page' => 'Back To :page',
+    'back_to_page' => 'Torna a :page',
     'cancel' => 'Annulla',
     'customize' => 'Personalizza',
     'dashboard' => 'Pannello di controllo',
