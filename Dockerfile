@@ -1,3 +1,6 @@
+# Multi stage docker file for the Attendize application layer images
+
+# Base image with nginx, php-fpm and composer built on debian
 FROM wyveo/nginx-php-fpm:latest as base
 
 # Set up code
@@ -7,11 +10,14 @@ COPY . .
 # install dependencies and configure php
 RUN ./scripts/setup
 
+# The worker container runs the laravel queue in the background
 FROM base as worker
 
 CMD ["php", "artisan", "queue:work", "--daemon"]
 
-FROM worker as web
+# The web container runs the HTTP server and connects to all other services in the application stack
+FROM base as web
+
 # nginx config
 COPY nginx.conf /etc/nginx/conf.d/default.conf
 
@@ -24,3 +30,6 @@ COPY ssl-params.conf /etc/nginx/snippets/ssl-params.conf
 
 # Starting nginx server
 CMD ["/start.sh"]
+
+# NOTE: if you are deploying to production with this image, you should extend this Dockerfile with another stage that
+# performs clean up (i.e. removing composer) and installs your own dependencies (i.e. your ssl certificate).
