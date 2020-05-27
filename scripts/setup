@@ -1,0 +1,8 @@
+#! /bin/bash
+
+composer install --no-interaction
+cp .env.example .env
+chmod -R a+w .env
+chmod -R a+w storage/
+chmod -R a+w bootstrap/cache/
+php artisan key:generate
