@@ -6,6 +6,11 @@ build:
 	docker build --tag attendize_worker --target worker --cache-from attendize_base:latest .
 	docker build --tag attendize_web --target web --cache-from attendize_worker:latest .
 
+build-apache:
+	docker build --tag attendize_base --target base --file Dockerfile-apache .
+	docker build --tag attendize_worker --target worker --cache-from attendize_base:latest --file Dockerfile-apache .
+	docker build --tag attendize_web --target web --cache-from attendize_worker:latest --file Dockerfile-apache .
+
 ################
 # The following commands are for local development use only and won't work in a production environment
 ################

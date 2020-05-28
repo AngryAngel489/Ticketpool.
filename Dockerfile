@@ -7,7 +7,7 @@ FROM wyveo/nginx-php-fpm:latest as base
 WORKDIR /usr/share/nginx/html
 COPY . .
 
-# install dependencies and configure php
+# run composer, chmod files, setup laravel key
 RUN ./scripts/setup
 
 # The worker container runs the laravel queue in the background
@@ -28,8 +28,12 @@ RUN openssl req -x509 -nodes -days 365 -newkey rsa:2048 -keyout /etc/ssl/private
 COPY self-signed.conf /etc/nginx/snippets/self-signed.conf
 COPY ssl-params.conf /etc/nginx/snippets/ssl-params.conf
 
+# Ports to expose
+EXPOSE 80
+EXPOSE 443
+
 # Starting nginx server
 CMD ["/start.sh"]
 
 # NOTE: if you are deploying to production with this image, you should extend this Dockerfile with another stage that
-# performs clean up (i.e. removing composer) and installs your own dependencies (i.e. your ssl certificate).
+# performs clean up (i.e. removing composer) and installs your own dependencies (i.e. your own ssl certificate).
