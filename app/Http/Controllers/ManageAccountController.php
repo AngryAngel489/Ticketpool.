@@ -9,7 +9,6 @@ use App\Models\Currency;
 use App\Models\PaymentGateway;
 use App\Models\Timezone;
 use App\Models\User;
-use Exception;
 use GuzzleHttp\Client;
 use Illuminate\Contracts\Mail\Mailable;
 use Illuminate\Http\JsonResponse;
@@ -20,6 +19,7 @@ use Illuminate\Support\Facades\Mail;
 use Illuminate\Support\Facades\Validator;
 use Illuminate\Support\Str;
 use Services\PaymentGateway\Dummy;
+use Spatie\Permission\Models\Role;
 use Services\PaymentGateway\Stripe;
 use Services\PaymentGateway\StripeSCA;
 use Utils;
@@ -191,8 +191,12 @@ class ManageAccountController extends MyBaseController
         $user->email = $request->input('email');
         $user->password = Hash::make($temp_password);
         $user->account_id = Auth::user()->account_id;
+        $user->organiser_id = Auth::user()->organiser_id;
 
         $user->save();
+        // Normal user role assignment
+        $user->assignRole(Role::findByName('user'));
+        $user->givePermissionTo($user->getAllPermissions());
 
         $data = [
             'user'          => $user,
