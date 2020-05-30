@@ -10,7 +10,6 @@ use App\Models\PaymentGateway;
 use App\Models\Timezone;
 use App\Models\User;
 use GuzzleHttp\Client;
-use Illuminate\Contracts\Mail\Mailable;
 use Illuminate\Http\JsonResponse;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
@@ -204,7 +203,7 @@ class ManageAccountController extends MyBaseController
             'inviter'       => Auth::user(),
         ];
 
-        Mail::send('Emails.inviteUser', $data, static function (Mailable $message) use ($data) {
+        Mail::send('Emails.inviteUser', $data, static function ($message) use ($data) {
             $message->to($data['user']->email)
                 ->subject(trans('Email.invite_user', [
                     'name' => $data['inviter']->first_name . ' ' . $data['inviter']->last_name,
