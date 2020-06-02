@@ -17,6 +17,7 @@ build-apache:
 
 # set up docker images and run containers for local development with docker-compose only
 setup: build
+	cp .env.example .env
 	docker-compose up -d
 	docker-compose exec web ./scripts/setup
 	open https://localhost:8081/install
