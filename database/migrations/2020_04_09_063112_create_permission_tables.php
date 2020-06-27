@@ -3,6 +3,8 @@
 use Illuminate\Support\Facades\Schema;
 use Illuminate\Database\Schema\Blueprint;
 use Illuminate\Database\Migrations\Migration;
+use Illuminate\Support\Facades\Artisan;
+use Illuminate\Support\Facades\Log;
 
 class CreatePermissionTables extends Migration
 {
@@ -86,6 +88,11 @@ class CreatePermissionTables extends Migration
         app('cache')
             ->store(config('permission.cache.store') != 'default' ? config('permission.cache.store') : null)
             ->forget(config('permission.cache.key'));
+
+        // Assign roles to all previous users in the system.
+        Log::debug("Seeding initial roles and permissions from the migration");
+        Artisan::call('db:seed', array('--class' => RolesAndPermissionsSeeder::class));
+        Log::debug("Finished Seeding initial roles and permissions");
     }
 
     /**

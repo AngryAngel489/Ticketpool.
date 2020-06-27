@@ -20,7 +20,5 @@ class DatabaseSeeder extends Seeder
         $this->call(QuestionTypesSeeder::class);
         $this->call(TicketStatusSeeder::class);
         $this->call(TimezoneSeeder::class);
-        $this->call(RolesAndPermissionsSeeder::class);
-        $this->call(RolesPermissionsLocal::class);
     }
 }

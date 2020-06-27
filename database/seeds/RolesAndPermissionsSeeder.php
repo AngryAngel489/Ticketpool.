@@ -2,7 +2,9 @@
 
 use Illuminate\Database\Seeder;
 use Spatie\Permission\Models\Role;
+use App\Models\User;
 use Spatie\Permission\Models\Permission;
+use Illuminate\Support\Facades\Log;
 
 class RolesAndPermissionsSeeder extends Seeder
 {
@@ -74,6 +76,24 @@ class RolesAndPermissionsSeeder extends Seeder
                 }
             });
         });
+
+        // We want to assign the default user role to every user in the database if there exists any
+        $this->out('Checking legacy users to attach the default roles to');
+
+        $allUsers = User::all();
+        Log::debug(sprintf("Found %d users to retrofit default role to", $allUsers->count()));
+
+        if ($allUsers->count() > 0) {
+            $allUsers->each(function($user) {
+                /** @var \App\Models\User $user */
+                if ($user->hasRole('user') === false) {
+                    Log::debug(sprintf("Assigning role to user: [ID:%d]", $user->id));
+                    $user->assignRole('user');
+                }
+            });
+        } else {
+            Log::debug('No users could be found that needed to be updated with roles');
+        }
     }
 
     /**
