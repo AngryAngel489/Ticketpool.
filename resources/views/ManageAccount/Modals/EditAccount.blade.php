@@ -124,7 +124,30 @@
                                                     </div>
                                                 </td>
                                                 <td>{{$user->email}}</td>
-                                                <td></td>
+                                                <td>
+                                                    <div class="form-group">
+                                                        <?php
+                                                        $checked = $user->can('manage events');
+                                                        $disabled = ($user->roles->first()->name !== 'user');
+                                                        $uniqueID = sprintf("can_manage_events_%d", $user->id);
+                                                        $attributes = [
+                                                            'id' => $uniqueID,
+                                                            'data-user' => $user->id,
+                                                            'data-update-url' => route('postToggleUserCanManageEvents'),
+                                                        ];
+
+                                                        if ($disabled) {
+                                                            $attributes['disabled'] = 'disabled';
+                                                        }
+                                                        ?>
+                                                        <div class="checkbox custom-checkbox">
+                                                            {!! Form::checkbox("can_manage_events", 1, $checked, $attributes) !!}
+                                                            {!! Form::label($uniqueID, ' ', [
+                                                                'title' => ($disabled) ? trans("ManageAccount.additional_permission") : '',
+                                                            ]) !!}
+                                                        </div>
+                                                    </div>
+                                                </td>
                                             </tr>
                                         @endforeach
                                         <tr>

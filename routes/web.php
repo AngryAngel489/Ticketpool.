@@ -244,6 +244,10 @@ Route::group(
             Route::post('update_user_role',
                 [ManageAccountController::class, 'postUpdateUserRole']
             )->name('postUpdateUserRole');
+
+            Route::post('toggle_user_can_manage_events',
+                [ManageAccountController::class, 'postToggleUserCanManageEvents']
+            )->name('postToggleUserCanManageEvents');
         });
 
         Route::get('select_organiser', [OrganiserController::class, 'showSelectOrganiser'])

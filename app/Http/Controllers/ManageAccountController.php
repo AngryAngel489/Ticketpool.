@@ -19,6 +19,7 @@ use Illuminate\Support\Facades\Validator;
 use Illuminate\Support\Str;
 use Services\PaymentGateway\Dummy;
 use Spatie\Permission\Models\Role;
+use Spatie\Permission\Models\Permission;
 use Services\PaymentGateway\Stripe;
 use Services\PaymentGateway\StripeSCA;
 use Spatie\Permission\Exceptions\RoleDoesNotExist;
@@ -42,6 +43,7 @@ class ManageAccountController extends MyBaseController
             'default_payment_gateway_id' => PaymentGateway::getDefaultPaymentGatewayId(),
             'account_payment_gateways'   => AccountPaymentGateway::scope()->get(),
             'version_info'               => $this->getVersionInfo(),
+            // Only super admin users gets to manage users so this call is safe
             'roles'                      => Role::all(),
         ];
 
@@ -232,7 +234,7 @@ class ManageAccountController extends MyBaseController
         ]);
     }
 
-     /**
+    /**
      * Update the user role
      *
      * @return JsonResponse
@@ -267,6 +269,51 @@ class ManageAccountController extends MyBaseController
         return response()->json([
             'status'  => 'success',
             'message' => trans('Controllers.success_user_updated_role', ['name' => $user->email]),
+        ]);
+    }
+
+    /**
+     * Toggle the user can manage events
+     *
+     * @return JsonResponse
+     */
+    public function postToggleUserCanManageEvents(Request $request)
+    {
+        $rules = [
+            'user_id' => ['required'],
+        ];
+
+        $messages = [
+            'user_id.required' => trans('Controllers.error.role.required'),
+        ];
+
+        $validation = Validator::make($request->all(), $rules, $messages);
+
+        if ($validation->fails()) {
+            return response()->json([
+                'status'   => 'error',
+                'messages' => $validation->messages()->toArray(),
+            ]);
+        }
+
+        /** @var \App\Models\User $user */
+        $user = User::find($request->input('user_id'));
+
+        // Toggle between the extended manage events permission
+        $isChecked = $request->boolean('checked');
+        $manageEvents = Permission::findByName('manage events', 'web');
+
+        if ($isChecked && !$user->can('manage events')) {
+            $user->givePermissionTo($manageEvents);
+            $message = trans('Controllers.success_user_can_manage_events', ['name' => $user->email]);
+        } elseif (!$isChecked) {
+            $user->revokePermissionTo($manageEvents);
+            $message = trans('Controllers.success_user_cannot_manage_events', ['name' => $user->email]);
+        }
+
+        return response()->json([
+            'status'  => 'success',
+            'message' => $message,
         ]);
     }
 }

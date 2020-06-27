@@ -8,6 +8,7 @@ return array (
   'account' => 'Account',
   'account_id' => 'Account ID',
   'accout_owner' => 'Account owner',
+  'additional_permission' => 'This additional permission can only be changed for User roles',
   'add_user_help_block' => 'Added users will receive further instruction via email.',
   'add_user_submit' => 'Add user',
   'api_key' => 'API key',
