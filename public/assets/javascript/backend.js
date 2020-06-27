@@ -9585,18 +9585,6 @@ $.cf = {
                             if (typeof data.message !== 'undefined') {
                                 showMessage(data.message);
                             }
-
-                            switch (data.status) {
-                                case 'success':
-                                    // TODO: remap the event permission boxes
-                                    break;
-                                case 'error':
-                                    /* Error */
-                                    break;
-
-                                default:
-                                    break;
-                            }
                         }).fail(function (data) {
                         showMessage(Attendize.GenericErrorMessages);
                     });
