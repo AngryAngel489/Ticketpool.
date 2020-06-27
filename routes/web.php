@@ -241,6 +241,9 @@ Route::group(
                 [ManageAccountController::class, 'postInviteUser']
             )->name('postInviteUser');
 
+            Route::post('update_user_role',
+                [ManageAccountController::class, 'postUpdateUserRole']
+            )->name('postUpdateUserRole');
         });
 
         Route::get('select_organiser', [OrganiserController::class, 'showSelectOrganiser'])

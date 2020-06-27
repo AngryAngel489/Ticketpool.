@@ -67,6 +67,13 @@ class User extends Authenticatable
     ];
 
     /**
+     * The relationships that should always be loaded.
+     *
+     * @var array
+     */
+    protected $with = ['roles', 'permissions'];
+
+    /**
      * The account associated with the user.
      *
      * @return \Illuminate\Database\Eloquent\Relations\BelongsTo

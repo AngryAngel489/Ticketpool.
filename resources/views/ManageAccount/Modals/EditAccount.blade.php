@@ -14,8 +14,11 @@
             margin-bottom: 0;
             border: 0;
         }
+        .user-list .form-group {
+            margin-bottom: 0;
+        }
     </style>
-    <div class="modal-dialog account_settings">
+    <div class="modal-dialog account_settings" style="width:750px;">
         <div class="modal-content">
             <div class="modal-header text-center">
                 <button type="button" class="close" data-dismiss="modal">&times;</button>
@@ -85,7 +88,6 @@
                                 @include('ManageAccount.Partials.PaymentGatewayOptions')
                             </div>
                             <div class="tab-pane" id="users_account">
-                                {!! Form::open(['url' => route('postInviteUser'), 'class' => 'ajax']) !!}
                                 <div class="table-responsive">
                                     <table class="table table-bordered">
                                         <thead>
@@ -98,15 +100,36 @@
                                         </thead>
                                         <tbody>
                                         @foreach($account->users as $user)
-                                            <tr>
+                                            <tr class="user-list">
                                                 <td>{{$user->first_name}} {{$user->last_name}}</td>
-                                                <td class="text-center"><span class="label label-info">{{ Str::title($user->roles->first()->name) }}</span></td>
+                                                <td class="text-center">
+                                                    <div class="form-group">
+                                                        <?php
+                                                        $defaultAssignedSelected = 1;
+                                                        $assignedRoles = $roles->mapWithKeys(function($role) use ($user, &$defaultAssignedSelected) {
+                                                            // Auto select the user role
+                                                            if ($role->name === $user->roles->first()->name) {
+                                                                $defaultAssignedSelected = $role->id;
+                                                            }
+                                                            return [$role['id'] => Str::title($role['name'])];
+                                                        });
+                                                        ?>
+                                                        {!!
+                                                        Form::select('assigned_role', $assignedRoles, $defaultAssignedSelected, [
+                                                            'class' => 'form-control required',
+                                                            'data-user' => $user->id,
+                                                            'data-update-url' => route('postUpdateUserRole'),
+                                                        ]);
+                                                        !!}
+                                                    </div>
+                                                </td>
                                                 <td>{{$user->email}}</td>
                                                 <td></td>
                                             </tr>
                                         @endforeach
                                         <tr>
                                             <td colspan="4">
+                                                {!! Form::open(['url' => route('postInviteUser'), 'class' => 'ajax']) !!}
                                                 <div class="row">
                                                     <div class="col-md-12">
                                                         <h4>@lang("ManageAccount.invite_new_user")</h4>
@@ -165,12 +188,12 @@
                                                     </div>
                                                 </div>
                                                 <span class="input-group-btn">{!!Form::submit(trans("ManageAccount.add_user_submit"), ['class' => 'btn btn-primary'])!!}</span>
+                                                {!! Form::close() !!}
                                             </td>
                                         </tr>
                                         </tbody>
                                     </table>
                                 </div>
-                                {!! Form::close() !!}
                             </div>
                             <div class="tab-pane " id="about">
                                 <h4>@lang("ManageAccount.version_info")</h4>

@@ -231,4 +231,42 @@ class ManageAccountController extends MyBaseController
             'message' => trans('Controllers.success_name_has_received_instruction', ['name' => $user->email]),
         ]);
     }
+
+     /**
+     * Update the user role
+     *
+     * @return JsonResponse
+     */
+    public function postUpdateUserRole(Request $request)
+    {
+        $rules = [
+            'assigned_role' => ['required'],
+            'user_id' => ['required'],
+        ];
+
+        $messages = [
+            'user_id.required' => trans('Controllers.error.role.required'),
+            'assigned_role.required' => trans('Controllers.error.role.required'),
+        ];
+
+        $validation = Validator::make($request->all(), $rules, $messages);
+
+        if ($validation->fails()) {
+            return response()->json([
+                'status'   => 'error',
+                'messages' => $validation->messages()->toArray(),
+            ]);
+        }
+
+        /** @var \App\Models\User $user */
+        $user = User::find($request->input('user_id'));
+        $assignedRole = Role::findById($request->input('assigned_role'));
+        $user->syncRoles($assignedRole);
+        $user->syncPermissions($assignedRole->permissions()->get());
+
+        return response()->json([
+            'status'  => 'success',
+            'message' => trans('Controllers.success_user_updated_role', ['name' => $user->email]),
+        ]);
+    }
 }

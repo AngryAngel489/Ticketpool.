@@ -9573,6 +9573,35 @@ $.cf = {
 
                 $('html').removeClass('working');
 
+                $('select[name=assigned_role]').on('change', function (e) {
+                    var select = $(e.currentTarget);
+                    var data = {
+                        "assigned_role": select.val(),
+                        "user_id": select.data('user')
+                    };
+
+                    $.post(select.data('update-url'), data)
+                        .done(function (data) {
+                            if (typeof data.message !== 'undefined') {
+                                showMessage(data.message);
+                            }
+
+                            switch (data.status) {
+                                case 'success':
+                                    // TODO: remap the event permission boxes
+                                    break;
+                                case 'error':
+                                    /* Error */
+                                    break;
+
+                                default:
+                                    break;
+                            }
+                        }).fail(function (data) {
+                        showMessage(Attendize.GenericErrorMessages);
+                    });
+                });
+
             }
         }).done().fail(function (data) {
             $('html').removeClass('working');
@@ -9695,7 +9724,6 @@ $.cf = {
             this.checked = $(this).checked;
         });
     });
-
 
     /*
      * ------------------------------------------------------------

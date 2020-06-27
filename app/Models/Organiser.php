@@ -39,7 +39,7 @@ class Organiser extends MyBaseModel implements AuthenticatableContract
         'tax_id'          => 'Tax ID',
     ];
 
-        /**
+    /**
      * The relationships that should always be loaded.
      *
      * @var array
