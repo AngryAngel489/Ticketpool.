@@ -21,6 +21,7 @@ use Services\PaymentGateway\Dummy;
 use Spatie\Permission\Models\Role;
 use Services\PaymentGateway\Stripe;
 use Services\PaymentGateway\StripeSCA;
+use Spatie\Permission\Exceptions\RoleDoesNotExist;
 use Utils;
 
 class ManageAccountController extends MyBaseController
@@ -41,6 +42,7 @@ class ManageAccountController extends MyBaseController
             'default_payment_gateway_id' => PaymentGateway::getDefaultPaymentGatewayId(),
             'account_payment_gateways'   => AccountPaymentGateway::scope()->get(),
             'version_info'               => $this->getVersionInfo(),
+            'roles'                      => Role::all(),
         ];
 
         return view('ManageAccount.Modals.EditAccount', $data);
@@ -165,6 +167,8 @@ class ManageAccountController extends MyBaseController
     public function postInviteUser(Request $request)
     {
         $rules = [
+            'organiser' => ['required'],
+            'role' => ['required'],
             'email' => ['required', 'email', 'unique:users,email,NULL,id,account_id,' . Auth::user()->account_id],
         ];
 
@@ -172,6 +176,8 @@ class ManageAccountController extends MyBaseController
             'email.email'    => trans('Controllers.error.email.email'),
             'email.required' => trans('Controllers.error.email.required'),
             'email.unique'   => trans('Controllers.error.email.unique'),
+            'organiser.required' => trans('Controllers.error.organiser.required'),
+            'role.required' => trans('Controllers.error.role.required'),
         ];
 
         $validation = Validator::make($request->all(), $rules, $messages);
@@ -187,14 +193,23 @@ class ManageAccountController extends MyBaseController
 
         $user = new User();
 
+        $user->first_name = $request->input('first_name');
+        $user->last_name = $request->input('last_name');
         $user->email = $request->input('email');
         $user->password = Hash::make($temp_password);
         $user->account_id = Auth::user()->account_id;
-        $user->organiser_id = Auth::user()->organiser_id;
+        $user->organiser_id = $request->input('organiser');
 
         $user->save();
-        // Normal user role assignment
-        $user->assignRole(Role::findByName('user'));
+
+        // Assigning role to user from selection. If for some reason the role errors out, we assign the default role.
+        try {
+            $assignedRole = Role::findById($request->input('role'));
+        } catch (RoleDoesNotExist $e) {
+            $assignedRole = Role::findByName('user');
+        }
+
+        $user->assignRole($assignedRole);
         $user->givePermissionTo($user->getAllPermissions());
 
         $data = [

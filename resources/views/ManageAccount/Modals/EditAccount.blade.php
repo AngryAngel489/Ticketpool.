@@ -98,16 +98,58 @@
                                         @endforeach
                                         <tr>
                                             <td colspan="3">
-                                                <div class="input-group">
-                                                    {!! Form::text('email', '',  ['class' => 'form-control', 'placeholder' => trans("ManageAccount.email_address_placeholder")]) !!}
-                                                    <span class="input-group-btn">
-                                                          {!!Form::submit(trans("ManageAccount.add_user_submit"), ['class' => 'btn btn-primary'])!!}
-                                                    </span>
+                                                <div class="row">
+                                                    <div class="col-md-12">
+                                                        <span class="help-block">@lang("ManageAccount.add_user_help_block")</span>
+                                                    </div>
                                                 </div>
-                                                <br />
-                                                <span class="help-block">
-                                                    @lang("ManageAccount.add_user_help_block")
-                                                </span>
+                                                <div class="row">
+                                                    <div class="col-md-6">
+                                                        <div class="form-group">
+                                                            {!! Form::label('first_name', trans("ManageAccount.first_name"), ['class'=>'control-label']) !!}
+                                                            {!! Form::text('first_name', old('first_name'), ['class'=>'form-control']) !!}
+                                                        </div>
+                                                    </div>
+                                                    <div class="col-md-6">
+                                                        <div class="form-group">
+                                                            {!! Form::label('last_name', trans("ManageAccount.last_name"), ['class'=>'control-label']) !!}
+                                                            {!! Form::text('last_name', old('last_name'), ['class'=>'form-control']) !!}
+                                                        </div>
+                                                    </div>
+                                                </div>
+                                                <div class="row">
+                                                    <div class="col-md-12">
+                                                        <div class="form-group">
+                                                            {!! Form::label('email', trans("ManageAccount.email"), ['class'=>'control-label required', 'placeholder' => trans("ManageAccount.email_address_placeholder")]) !!}
+                                                            {!! Form::text('email', old('email'), ['class'=>'form-control']) !!}
+                                                        </div>
+                                                    </div>
+                                                </div>
+                                                <div class="row">
+                                                    <div class="col-md-6">
+                                                        <div class="form-group">
+                                                            {!! Form::label('organiser', trans("ManageAccount.organiser"), ['class'=>'control-label required']) !!}
+                                                            <?php
+                                                            $organisers = $account->organisers->mapWithKeys(function($organiser) {
+                                                                return [$organiser['id'] => $organiser['name']];
+                                                            });
+                                                            ?>
+                                                            {!! Form::select('organiser', $organisers, '', ['class'=>'form-control required']); !!}
+                                                        </div>
+                                                    </div>
+                                                    <div class="col-md-6">
+                                                        <div class="form-group">
+                                                            {!! Form::label('role', trans("ManageAccount.role"), ['class'=>'control-label required']) !!}
+                                                            <?php
+                                                            $roles = $roles->mapWithKeys(function($role) {
+                                                                return [$role['id'] => Str::title($role['name'])];
+                                                            });
+                                                            ?>
+                                                            {!! Form::select('role', $roles, '', ['class'=>'form-control required']); !!}
+                                                        </div>
+                                                    </div>
+                                                </div>
+                                                <span class="input-group-btn">{!!Form::submit(trans("ManageAccount.add_user_submit"), ['class' => 'btn btn-primary'])!!}</span>
                                             </td>
                                         </tr>
                                         </tbody>

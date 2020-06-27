@@ -47,6 +47,8 @@ return array (
     array (
       'required' => 'Please enter your last name.',
     ),
+    'organiser' => ['required' => 'Please select an organiser'],
+    'role' => ['required' => 'Please select a role'],
     'page_bg_color' =>
     array (
       'required' => 'Please enter a background color.',
