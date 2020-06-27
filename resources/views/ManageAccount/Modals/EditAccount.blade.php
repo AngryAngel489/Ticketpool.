@@ -88,18 +88,28 @@
                                 {!! Form::open(['url' => route('postInviteUser'), 'class' => 'ajax']) !!}
                                 <div class="table-responsive">
                                     <table class="table table-bordered">
+                                        <thead>
+                                            <tr>
+                                                <td><strong>{{ trans("ManageAccount.name") }}</strong></td>
+                                                <td><strong>{{ trans("ManageAccount.role") }}</strong></td>
+                                                <td><strong>{{ trans("ManageAccount.email") }}</strong></td>
+                                                <td><strong>{{ trans("ManageAccount.manage_events") }}</strong></td>
+                                            </tr>
+                                        </thead>
                                         <tbody>
                                         @foreach($account->users as $user)
                                             <tr>
                                                 <td>{{$user->first_name}} {{$user->last_name}}</td>
+                                                <td class="text-center"><span class="label label-info">{{ Str::title($user->roles->first()->name) }}</span></td>
                                                 <td>{{$user->email}}</td>
-                                                <td><span class="label label-info">{{ Str::title($user->roles->first()->name) }}</span></td>
+                                                <td></td>
                                             </tr>
                                         @endforeach
                                         <tr>
-                                            <td colspan="3">
+                                            <td colspan="4">
                                                 <div class="row">
                                                     <div class="col-md-12">
+                                                        <h4>@lang("ManageAccount.invite_new_user")</h4>
                                                         <span class="help-block">@lang("ManageAccount.add_user_help_block")</span>
                                                     </div>
                                                 </div>
@@ -141,11 +151,16 @@
                                                         <div class="form-group">
                                                             {!! Form::label('role', trans("ManageAccount.role"), ['class'=>'control-label required']) !!}
                                                             <?php
-                                                            $roles = $roles->mapWithKeys(function($role) {
+                                                            $defaultSelected = 1;
+                                                            $roles = $roles->mapWithKeys(function($role) use (&$defaultSelected) {
+                                                                // Auto select the user role
+                                                                if ($role->name === 'user') {
+                                                                    $defaultSelected = $role->id;
+                                                                }
                                                                 return [$role['id'] => Str::title($role['name'])];
                                                             });
                                                             ?>
-                                                            {!! Form::select('role', $roles, '', ['class'=>'form-control required']); !!}
+                                                            {!! Form::select('role', $roles, $defaultSelected, ['class'=>'form-control required']); !!}
                                                         </div>
                                                     </div>
                                                 </div>
