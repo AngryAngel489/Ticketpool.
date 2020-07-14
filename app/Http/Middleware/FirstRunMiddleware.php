@@ -25,7 +25,7 @@ class FirstRunMiddleware
          * else - if there's only one organiser bring the user straight there.
          */
         if ($this->accountHasNoOrganisers($request)) {
-            return redirect(route('showCreateOrganiser', ['first_run' => '1']));
+            return redirect(route('showCreateOrganiser', ['first_run' => 'yup']));
         } elseif ($this->accountHasOneOrganiser($request)) {
             return redirect(route('showOrganiserDashboard', ['organiser_id' => Organiser::scope()->first()->id]));
         }

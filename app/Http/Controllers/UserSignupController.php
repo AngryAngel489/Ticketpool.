@@ -78,6 +78,11 @@ class UserSignupController extends Controller
         $user_data['is_registered'] = 1;
         $user = User::create($user_data);
 
+        // We need to assign the first ever user as super admin to be able to add the first organiser
+        if ($request->get('first_run') === 'yup') {
+            $user->assignRole('super admin');
+        }
+
         if ($is_attendize) {
             // TODO: Do this async?
             Mail::send('Emails.ConfirmEmail',
