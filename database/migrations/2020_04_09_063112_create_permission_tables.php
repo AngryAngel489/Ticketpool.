@@ -91,7 +91,7 @@ class CreatePermissionTables extends Migration
 
         // Assign roles to all previous users in the system.
         Log::debug("Seeding initial roles and permissions from the migration");
-        Artisan::call('db:seed', array('--class' => RolesAndPermissionsSeeder::class));
+        Artisan::call('db:seed', ['--class' => RolesAndPermissionsSeeder::class, '--force' => true]);
         Log::debug("Finished Seeding initial roles and permissions");
     }
 
