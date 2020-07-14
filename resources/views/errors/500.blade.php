@@ -1,5 +1,5 @@
 @extends('errors::minimal')
 
-@section('title', @lang("error.back_soon"))
+@section('title', __("error.back_soon"))
 @section('code', '500')
-@section('message', @lang("error.back_soon_description"))
+@section('message', __("error.back_soon_description"))
