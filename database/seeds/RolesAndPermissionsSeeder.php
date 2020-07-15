@@ -87,8 +87,8 @@ class RolesAndPermissionsSeeder extends Seeder
             $allUsers->each(function($user) {
                 /** @var \App\Models\User $user */
                 if ($user->hasRole('user') === false) {
-                    Log::debug(sprintf("Assigning role to user: [ID:%d]", $user->id));
-                    $user->assignRole('user');
+                    Log::debug(sprintf("Assigning super admin role to legacy user: [ID:%d]", $user->id));
+                    $user->assignRole('super admin');
                 }
             });
         } else {
