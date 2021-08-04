@@ -9573,6 +9573,42 @@ $.cf = {
 
                 $('html').removeClass('working');
 
+                $('select[name=assigned_role]').on('change', function (e) {
+                    var select = $(e.currentTarget);
+                    var data = {
+                        "assigned_role": select.val(),
+                        "user_id": select.data('user')
+                    };
+
+                    $.post(select.data('update-url'), data)
+                        .done(function (data) {
+                            if (typeof data.message !== 'undefined') {
+                                showMessage(data.message);
+                            }
+                        }).fail(function (data) {
+                        showMessage(Attendize.GenericErrorMessages);
+                    });
+                });
+
+                $('input[name=can_manage_events]').on('click', function (e) {
+                    var canManageEvents = $(e.currentTarget);
+                    var isChecked = canManageEvents.is(':checked');
+
+                    var data = {
+                        "checked": isChecked,
+                        "user_id": canManageEvents.data('user')
+                    };
+
+                    $.post(canManageEvents.data('update-url'), data)
+                        .done(function (data) {
+                            if (typeof data.message !== 'undefined') {
+                                showMessage(data.message);
+                            }
+                        }).fail(function (data) {
+                        showMessage(Attendize.GenericErrorMessages);
+                    });
+                });
+
             }
         }).done().fail(function (data) {
             $('html').removeClass('working');
@@ -9695,7 +9731,6 @@ $.cf = {
             this.checked = $(this).checked;
         });
     });
-
 
     /*
      * ------------------------------------------------------------

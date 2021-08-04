@@ -241,16 +241,23 @@ Route::group(
                 [ManageAccountController::class, 'postInviteUser']
             )->name('postInviteUser');
 
+            Route::post('update_user_role',
+                [ManageAccountController::class, 'postUpdateUserRole']
+            )->name('postUpdateUserRole');
+
+            Route::post('toggle_user_can_manage_events',
+                [ManageAccountController::class, 'postToggleUserCanManageEvents']
+            )->name('postToggleUserCanManageEvents');
         });
 
-        Route::get('select_organiser',
-            [OrganiserController::class, 'showSelectOrganiser']
-        )->name('showSelectOrganiser');
+        Route::get('select_organiser', [OrganiserController::class, 'showSelectOrganiser'])
+            ->middleware('manage.organisers')
+            ->name('showSelectOrganiser');
 
         /*
          * Organiser routes
          */
-        Route::group(['prefix' => 'organiser'], function () {
+        Route::group(['prefix' => 'organiser', 'middleware' => ['manage.organisers']], function () {
 
             Route::get('{organiser_id}/dashboard',
                 [OrganiserDashboardController::class, 'showDashboard']
@@ -649,7 +656,6 @@ Route::group(
         });
     });
 
-    Route::get('/',
-        [IndexController::class, 'showIndex']
-    )->name('index');
+    // Index page
+    Route::get('/', [IndexController::class, 'showIndex'])->middleware('auth')->name('index');
 });

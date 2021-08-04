@@ -47,6 +47,9 @@ return array (
     array (
       'required' => 'Please enter your last name.',
     ),
+    'organiser' => ['required' => 'Please select an organiser'],
+    'role' => ['required' => 'Please select a role'],
+    'user_id' => ['required' => 'User identifier is required'],
     'page_bg_color' =>
     array (
       'required' => 'Please enter a background color.',
@@ -92,6 +95,9 @@ return array (
   'stripe_error' => 'There was an error connecting your Stripe account. Please try again.',
   'stripe_success' => 'You have successfully connected your Stripe account.',
   'success_name_has_received_instruction' => 'Success! <b>:name</b> has been sent further instructions.',
+  'success_user_updated_role' => 'Success! <b>:name</b> role has been updated',
+  'success_user_can_manage_events' => 'Success! <b>:name</b> can now manage all events within an organiser',
+  'success_user_cannot_manage_events' => 'Success! <b>:name</b> can now only manage their organiser\'s events',
   'successfully_cancelled_attendee' => 'Successfully Cancelled Attendee!',
   'successfully_cancelled_attendees' => 'Successfully Cancelled Attendees!',
   'successfully_created_organiser' => 'Successfully Created Organiser!',
