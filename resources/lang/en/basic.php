@@ -55,6 +55,9 @@ return array (
   'whoops' => 'Whoops!',
   'yes' => 'Yes',
   'no' => 'No',
+  'delete' => 'Delete',
+  'force_delete' => 'Force Delete',
+  'restore' => 'Restore',
   /*
    * Lines below will turn obsolete in localization helper, it is declared in app/Helpers/macros.
    * If you run it, it will break file input fields.

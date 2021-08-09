@@ -318,4 +318,64 @@ class ManageAccountController extends MyBaseController
             'message' => $message,
         ]);
     }
+
+    /**
+     * Delete user
+     *
+     * @param Request $request
+     * @param integer $userId
+     *
+     * @return JsonResponse
+     */
+    public function userDelete(Request $request, $userId)
+    {
+        /** @var \App\Models\User|null $user */
+        $user = User::withTrashed()->find($userId);
+        if (!$user) {
+            return response()->json([
+                'status'  => 'error',
+                'message' => trans('Controllers.error_user_was_not_found'),
+            ], 404);
+        }
+
+        if ($request->get('force', false)) {
+            $user->forceDelete();
+        } else {
+            $user->delete();
+        }
+
+        $message = trans('Controllers.success_user_was_deleted', ['name' => $user->email]);
+        return response()->json([
+            'status'  => 'success',
+            'message' => $message,
+        ]);
+    }
+
+    /**
+     * Restore deleted user
+     *
+     * @param Request $request
+     * @param integer $userId
+     *
+     * @return JsonResponse
+     */
+    public function userRestore(Request $request, $userId)
+    {
+        /** @var \App\Models\User|null $user */
+        $user = User::withTrashed()->find($userId);
+        if (!$user) {
+            return response()->json([
+                'status'  => 'error',
+                'message' => trans('Controllers.error_user_was_not_found'),
+            ], 404);
+        }
+
+        $user->restore();
+
+        $message = trans('Controllers.success_user_was_restored', ['name' => $user->email]);
+        return response()->json([
+            'status'  => 'success',
+            'message' => $message,
+        ]);
+    }
 }

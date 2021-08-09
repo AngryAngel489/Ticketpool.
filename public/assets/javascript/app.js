@@ -207,6 +207,143 @@ $(function () {
                     });
                 });
 
+                function findUserActionBtns(parent) {
+                    if (!parent) parent = document;
+                    return Array.from(
+                        parent.querySelectorAll("button[name=user_action]")
+                    );
+                }
+
+                function findUserActionBtnByAction(parent, action) {
+                    return parent.querySelector(
+                        "button[data-action=" + action + "]"
+                    );
+                }
+
+                function handleUserActionBtnClick(event) {
+                    var target = event.target;
+                    console.log("click", event, target.nodeName);
+
+                    if (target.nodeName !== "BUTTON") return;
+
+                    var action = target.dataset.action;
+                    var href = target.dataset.href;
+
+                    var onSuccess = function () {};
+
+                    var request;
+                    switch (action) {
+                        case "delete":
+                            request = new Request(href, {
+                                method: "DELETE",
+                            });
+                            onSuccess = function () {
+                                target.setAttribute("hidden", true);
+                                var parent = target.parentElement;
+                                findUserActionBtnByAction(
+                                    parent,
+                                    "restore"
+                                ).removeAttribute("hidden");
+                                findUserActionBtnByAction(
+                                    parent,
+                                    "force_delete"
+                                ).removeAttribute("hidden");
+                            };
+                            break;
+
+                        case "force_delete":
+                            request = new Request(href, {
+                                method: "DELETE",
+                            });
+                            onSuccess = function () {
+                                var buttonWrapper = target.parentElement;
+                                removeEventListeners(buttonWrapper);
+                                var td = buttonWrapper.parentElement;
+                                var tr = td.parentElement;
+                                tr.parentElement.removeChild(tr);
+                            };
+                            break;
+
+                        case "restore":
+                            request = new Request(href);
+                            onSuccess = function () {
+                                target.setAttribute("hidden", true);
+                                var parent = target.parentElement;
+                                findUserActionBtnByAction(
+                                    parent,
+                                    "force_delete"
+                                ).setAttribute("hidden", true);
+                                findUserActionBtnByAction(
+                                    parent,
+                                    "delete"
+                                ).removeAttribute("hidden");
+                            };
+                            break;
+                    }
+
+                    request.headers.set(
+                        "X-CSRF-TOKEN",
+                        document
+                            .querySelector('meta[name="_token"]')
+                            .getAttribute("content")
+                    );
+
+                    fetch(request)
+                        .then(function (response) {
+                            if (response.ok) return response;
+                            else {
+                                throw {
+                                    message: "response is not ok",
+                                    response,
+                                };
+                            }
+                        })
+                        .then(function (res) {
+                            return res.json();
+                        })
+                        .then(function (data) {
+                            if (typeof data.message !== "undefined") {
+                                showMessage(data.message);
+                            }
+
+                            onSuccess();
+                        })
+                        .catch(function (err) {
+                            console.error(err);
+
+                            err.response
+                                .json()
+                                .then(function (data) {
+                                    if (data.message) {
+                                        showMessage(data.message);
+                                    } else {
+                                        throw "missing message";
+                                    }
+                                })
+                                .catch(function () {
+                                    showMessage(Attendize.GenericErrorMessages);
+                                });
+                        });
+                }
+
+                function removeEventListeners(parent) {
+                    findUserActionBtns(parent).forEach(function (el) {
+                        el.removeEventListener(
+                            "click",
+                            handleUserActionBtnClick,
+                            false
+                        );
+                    });
+                }
+
+                findUserActionBtns().forEach(function (el) {
+                    el.addEventListener(
+                        "click",
+                        handleUserActionBtnClick,
+                        false
+                    );
+                });
+
             }
         }).done().fail(function (data) {
             $('html').removeClass('working');

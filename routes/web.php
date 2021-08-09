@@ -248,6 +248,14 @@ Route::group(
             Route::post('toggle_user_can_manage_events',
                 [ManageAccountController::class, 'postToggleUserCanManageEvents']
             )->name('postToggleUserCanManageEvents');
+
+            Route::delete('/user/{id}',
+                [ManageAccountController::class, 'userDelete']
+            )->name('userDelete');
+
+            Route::get('/user/{id}/restore',
+                [ManageAccountController::class, 'userRestore']
+            )->name('userRestore');
         });
 
         Route::get('select_organiser', [OrganiserController::class, 'showSelectOrganiser'])
