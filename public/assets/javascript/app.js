@@ -207,6 +207,59 @@ $(function () {
                     });
                 });
 
+                function findDropdownBtns(parent) {
+                    if (!parent) parent = document;
+                    return Array.from(
+                        parent.querySelectorAll("[data-id=dropdown]")
+                    );
+                }
+
+                function dropdownBtnsRemoveEventListeners(el) {
+                    el.removeEventListener(
+                        "click",
+                        (event) =>
+                            handleUserActionBtnClick(
+                                event,
+                                dropdownBtnsRemoveEventListeners.bind(
+                                    undefined,
+                                    el
+                                )
+                            ),
+                        false
+                    );
+                }
+
+                findDropdownBtns(document).forEach((el) => {
+                    el.addEventListener("click", toggleDropdown, false);
+                    findUserActionBtns(el.parentElement).forEach(function (el) {
+                        el.addEventListener(
+                            "click",
+                            (event) =>
+                                handleUserActionBtnClick(
+                                    event,
+                                    dropdownBtnsRemoveEventListeners.bind(
+                                        undefined,
+                                        el
+                                    )
+                                ),
+                            false
+                        );
+                    });
+                });
+
+                function toggleDropdown(event) {
+                    var target = event.target;
+                    var dropdownContent =
+                        target.parentElement.querySelector(".dropdown-content");
+                    var isVisible =
+                        dropdownContent.hasAttribute("hidden") || false;
+                    if (isVisible) {
+                        dropdownContent.removeAttribute("hidden");
+                    } else {
+                        dropdownContent.setAttribute("hidden", true);
+                    }
+                }
+
                 function findUserActionBtns(parent) {
                     if (!parent) parent = document;
                     return Array.from(
@@ -220,7 +273,7 @@ $(function () {
                     );
                 }
 
-                function handleUserActionBtnClick(event) {
+                function handleUserActionBtnClick(event, onRemoveCb = function() {}) {
                     var target = event.target;
                     console.log("click", event, target.nodeName);
 
@@ -257,8 +310,11 @@ $(function () {
                             });
                             onSuccess = function () {
                                 var buttonWrapper = target.parentElement;
-                                removeEventListeners(buttonWrapper);
-                                var td = buttonWrapper.parentElement;
+                                userActionBtnsRemoveEventListeners(buttonWrapper);
+                                onRemoveCb();
+                                var dropdownContent = buttonWrapper.parentElement;
+                                var dropdownWrapper = dropdownContent.parentElement;
+                                var td = dropdownWrapper.parentElement;
                                 var tr = td.parentElement;
                                 tr.parentElement.removeChild(tr);
                             };
@@ -326,7 +382,7 @@ $(function () {
                         });
                 }
 
-                function removeEventListeners(parent) {
+                function userActionBtnsRemoveEventListeners(parent) {
                     findUserActionBtns(parent).forEach(function (el) {
                         el.removeEventListener(
                             "click",
@@ -335,14 +391,6 @@ $(function () {
                         );
                     });
                 }
-
-                findUserActionBtns().forEach(function (el) {
-                    el.addEventListener(
-                        "click",
-                        handleUserActionBtnClick,
-                        false
-                    );
-                });
 
             }
         }).done().fail(function (data) {
