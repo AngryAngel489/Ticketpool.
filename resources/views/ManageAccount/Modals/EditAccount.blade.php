@@ -160,8 +160,19 @@
                                                                 &hellip;
                                                             </button>
 
-                                                            <div class="dropdown-content" style="position:absolute;z-index:10" hidden>
-                                                                <div style="display:flex;flex-direction:column;;bottom:0;right:0;">
+                                                            <div class="dropdown-content" style="position:absolute;z-index:10;bottom:0;right:0;transform:translateY(100%)" hidden>
+                                                                <div style="display:flex;flex-direction:column;padding:0.5rem;background-color:white">
+                                                                    <button
+                                                                        name="user_action"
+                                                                        data-action="send_invitation_message"
+                                                                        data-href="{!! route("sendInvitationMessage", ["id" => $user->id]) !!}"
+                                                                        class="btn btn-sm btn-default"
+                                                                        style="margin-bottom:0.5rem"
+                                                                        {!! $user->trashed() ? 'hidden' : '' !!}
+                                                                    >
+                                                                        {!! trans("ManageAccount.send_invitation_message") !!}
+                                                                    </button>
+
                                                                     <button
                                                                         name="user_action"
                                                                         data-action="restore"
@@ -169,6 +180,7 @@
                                                                         aria-label="{!! trans("basic.restore") !!}"
                                                                         title="{!! trans("basic.restore") !!}"
                                                                         class="btn btn-sm btn-warning"
+                                                                        style="margin-bottom:0.5rem"
                                                                         {!! !$user->trashed() ? 'hidden' : '' !!}
                                                                     >
                                                                         {!! trans("basic.restore") !!}
@@ -179,6 +191,7 @@
                                                                         data-action="force_delete"
                                                                         data-href="{!! route("userDelete", ["id" => $user->id, "force" => true]) !!}"
                                                                         class="btn btn-sm btn-danger"
+                                                                        style="margin-bottom:0.5rem"
                                                                         {!! !$user->trashed() ? 'hidden' : '' !!}
                                                                     >
                                                                         {!! trans("basic.force_delete") !!}

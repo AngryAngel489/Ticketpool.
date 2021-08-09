@@ -273,7 +273,10 @@ $(function () {
                     );
                 }
 
-                function handleUserActionBtnClick(event, onRemoveCb = function() {}) {
+                function handleUserActionBtnClick(
+                    event,
+                    onRemoveCb = function () {}
+                ) {
                     var target = event.target;
                     console.log("click", event, target.nodeName);
 
@@ -286,6 +289,12 @@ $(function () {
 
                     var request;
                     switch (action) {
+                        case "send_invitation_message":
+                            request = new Request(href, {
+                                method: "GET",
+                            });
+                            break;
+
                         case "delete":
                             request = new Request(href, {
                                 method: "DELETE",
@@ -293,6 +302,10 @@ $(function () {
                             onSuccess = function () {
                                 target.setAttribute("hidden", true);
                                 var parent = target.parentElement;
+                                findUserActionBtnByAction(
+                                    parent,
+                                    "send_invitation_message"
+                                ).setAttribute("hidden", true);
                                 findUserActionBtnByAction(
                                     parent,
                                     "restore"
@@ -310,10 +323,14 @@ $(function () {
                             });
                             onSuccess = function () {
                                 var buttonWrapper = target.parentElement;
-                                userActionBtnsRemoveEventListeners(buttonWrapper);
+                                userActionBtnsRemoveEventListeners(
+                                    buttonWrapper
+                                );
                                 onRemoveCb();
-                                var dropdownContent = buttonWrapper.parentElement;
-                                var dropdownWrapper = dropdownContent.parentElement;
+                                var dropdownContent =
+                                    buttonWrapper.parentElement;
+                                var dropdownWrapper =
+                                    dropdownContent.parentElement;
                                 var td = dropdownWrapper.parentElement;
                                 var tr = td.parentElement;
                                 tr.parentElement.removeChild(tr);
@@ -325,6 +342,10 @@ $(function () {
                             onSuccess = function () {
                                 target.setAttribute("hidden", true);
                                 var parent = target.parentElement;
+                                findUserActionBtnByAction(
+                                    parent,
+                                    "send_invitation_message"
+                                ).removeAttribute("hidden", true);
                                 findUserActionBtnByAction(
                                     parent,
                                     "force_delete"

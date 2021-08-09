@@ -9688,6 +9688,12 @@ $.cf = {
 
                     var request;
                     switch (action) {
+                        case "send_invitation_message":
+                            request = new Request(href, {
+                                method: "GET",
+                            });
+                            break;
+
                         case "delete":
                             request = new Request(href, {
                                 method: "DELETE",
@@ -9695,6 +9701,10 @@ $.cf = {
                             onSuccess = function () {
                                 target.setAttribute("hidden", true);
                                 var parent = target.parentElement;
+                                findUserActionBtnByAction(
+                                    parent,
+                                    "send_invitation_message"
+                                ).setAttribute("hidden", true);
                                 findUserActionBtnByAction(
                                     parent,
                                     "restore"
@@ -9727,6 +9737,10 @@ $.cf = {
                             onSuccess = function () {
                                 target.setAttribute("hidden", true);
                                 var parent = target.parentElement;
+                                findUserActionBtnByAction(
+                                    parent,
+                                    "send_invitation_message"
+                                ).removeAttribute("hidden", true);
                                 findUserActionBtnByAction(
                                     parent,
                                     "force_delete"

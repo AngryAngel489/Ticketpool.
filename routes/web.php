@@ -256,6 +256,10 @@ Route::group(
             Route::get('/user/{id}/restore',
                 [ManageAccountController::class, 'userRestore']
             )->name('userRestore');
+
+            Route::get('/user/{id}/send-invitation-message',
+                [ManageAccountController::class, 'sendInvitationMessage']
+            )->name('sendInvitationMessage');
         });
 
         Route::get('select_organiser', [OrganiserController::class, 'showSelectOrganiser'])
