@@ -112,7 +112,7 @@
                                                         $defaultAssignedSelected = 1;
                                                         $assignedRoles = $roles->mapWithKeys(function($role) use ($user, &$defaultAssignedSelected) {
                                                             // Auto select the user role
-                                                            if ($role->name === $user->roles->first()->name) {
+                                                            if (isset($user->roles) && $user->roles->first() !== null && $role->name === $user->roles->first()->name) {
                                                                 $defaultAssignedSelected = $role->id;
                                                             }
                                                             return [$role['id'] => Str::title($role['name'])];
@@ -132,7 +132,7 @@
                                                     <div class="form-group">
                                                         <?php
                                                         $checked = $user->can('manage events');
-                                                        $disabled = ($user->roles->first()->name !== 'user');
+                                                        $disabled = (isset($user->roles) && $user->roles->first() !== null && $user->roles->first()->name !== 'user');
                                                         $uniqueID = sprintf("can_manage_events_%d", $user->id);
                                                         $attributes = [
                                                             'id' => $uniqueID,
