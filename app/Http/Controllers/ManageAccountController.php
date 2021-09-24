@@ -200,6 +200,9 @@ class ManageAccountController extends MyBaseController
         $user->account_id = Auth::user()->account_id;
         $user->organiser_id = $request->input('organiser');
 
+        $temp_password = Str::random(8);
+        $user->password = Hash::make($temp_password);
+
         $user->save();
 
         // Assigning role to user from selection. If for some reason the role errors out, we assign the default role.
@@ -212,7 +215,7 @@ class ManageAccountController extends MyBaseController
         $user->assignRole($assignedRole);
         $user->givePermissionTo($user->getAllPermissions());
 
-        $this->generateNewPwdAndSentInvitationEmail($user);
+        $this->sentInvitationEmailTo($user, $temp_password);
 
         return response()->json([
             'status'  => 'success',
@@ -379,7 +382,11 @@ class ManageAccountController extends MyBaseController
             ], 404);
         }
 
-        $this->generateNewPwdAndSentInvitationEmail($user);
+        $temp_password = Str::random(8);
+        $user->password = Hash::make($temp_password);
+        $user->save();
+
+        $this->sentInvitationEmailTo($user, $temp_password);
 
         return response()->json([
             'status'  => 'success',
@@ -388,19 +395,16 @@ class ManageAccountController extends MyBaseController
     }
 
     /**
-     * Generates a new password and sends an invitation email
+     * Send an invitation email
      *
      * @param User $user
+     * @param string $password
      */
-    protected function generateNewPwdAndSentInvitationEmail(User $user)
+    protected function sentInvitationEmailTo(User $user, string $password)
     {
-        $temp_password = Str::random(8);
-        $user->password = Hash::make($temp_password);
-        $user->save();
-
         $data = [
             'user'          => $user,
-            'temp_password' => $temp_password,
+            'temp_password' => $password,
             'inviter'       => Auth::user(),
         ];
 
