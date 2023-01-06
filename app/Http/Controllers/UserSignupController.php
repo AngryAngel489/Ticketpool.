@@ -6,6 +6,8 @@ use Redirect;
 use App\Attendize\Utils;
 use App\Models\Account;
 use App\Models\User;
+use App\Models\PaymentGateway;
+use App\Models\AccountPaymentGateway;
 use Hash;
 use Illuminate\Contracts\Auth\Guard;
 use Illuminate\Http\Request;
@@ -83,6 +85,13 @@ class UserSignupController extends Controller
         if ($request->get('first_run') === 'yup') {
             $user->assignRole('super admin');
         }
+
+        $payment_gateway_data = [
+            'payment_gateway_id' => PaymentGateway::getDefaultPaymentGatewayId(),
+            'account_id' => $account->id,
+            'config' => '{"apiKey":"","publishableKey":""}',
+        ];
+        $paymentGateway = AccountPaymentGateway::create($payment_gateway_data);
 
         if ($is_attendize) {
             // TODO: Do this async?

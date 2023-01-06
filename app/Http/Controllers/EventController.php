@@ -145,7 +145,6 @@ class EventController extends MyBaseController
             $event->social_show_linkedin = $defaults->social_show_linkedin;
             $event->social_show_twitter = $defaults->social_show_twitter;
             $event->social_show_email = $defaults->social_show_email;
-            $event->social_show_googleplus = $defaults->social_show_googleplus;
             $event->social_show_whatsapp = $defaults->social_show_whatsapp;
             $event->is_1d_barcode_enabled = $defaults->is_1d_barcode_enabled;
             $event->ticket_border_color = $defaults->ticket_border_color;
@@ -350,7 +349,7 @@ class EventController extends MyBaseController
      * @param  Integer|false $event_id
      * @return \Illuminate\Http\RedirectResponse
      */
-    public function makeEventLive($event_id = false) {
+    public function postMakeEventLive($event_id = false) {
         $event = Event::scope()->findOrFail($event_id);
         $event->is_live = 1;
         $event->save();
